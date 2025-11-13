@@ -1,0 +1,9 @@
+{
+  "name": "visa-intelligence-commerce",
+  "version": "25.11.00",
+  "mcpServers": {
+    "visa-intelligence-commerce-doc": {
+      "httpUrl": "https://sandbox.mcp.visa.com/mcp/doc"
+    }
+  }
+}

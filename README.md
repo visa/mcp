@@ -4,7 +4,7 @@ A Gemini CLI extension that includes a tool with Visa Intelligent Commerce docum
 
 ## Visa Intelligent Commerce
 
-Visa Intelligent Commerce is a new platform and strategic initiative by Visa that enables AI agents to securely browse, shop, and purchase on behalf of consumers, marking a major step toward an era of autonomous, AI-driven commerce experiences.
+Visa Intelligent Commerce is a new platform and product initiative that enables AI agents to securely browse, shop, and purchase on behalf of consumers, marking a major step toward an era of autonomous, AI-driven commerce experiences.
 
 Visa Intelligent Commerce provides a suite of integrated APIs, tokenized digital credentials, and commercial tools so that AI agents - like chatbots or virtual assistants - can complete transactions on behalf of users within limits set by the consumer. The system is designed to improve security, reduce fraud, and boost the personalization and efficiency of digital shopping experiences for both buyers and merchants.
 
@@ -21,11 +21,6 @@ gemini extensions install https://github.com/visa/mcp
 
 Restart the Gemini CLI.
 
-## Visa Intelligent Commerce
-
-Visa Intelligent Commerce is a new platform and strategic initiative by Visa that enables AI agents to securely browse, shop, and purchase on behalf of consumers, marking a major step toward an era of autonomous, AI-driven commerce experiences.
-
-Visa Intelligent Commerce provides a suite of integrated APIs, tokenized digital credentials, and commercial tools so that AI agents - like chatbots or virtual assistants - can complete transactions on behalf of users within limits set by the consumer. The system is designed to improve security, reduce fraud, and boost the personalization and efficiency of digital shopping experiences for both buyers and merchants.
 
 ### How It Works
 

@@ -1,0 +1,16 @@
+# Build outputs
+dist/
+*.d.ts
+
+# Dependencies
+node_modules/
+
+# Configuration files
+*.config.js
+*.config.mjs
+
+# Coverage
+coverage/
+
+# Logs
+*.log

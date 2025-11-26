@@ -1,0 +1,22 @@
+{
+  "name": "packages",
+  "version": "1.0.0",
+  "description": "Shared packages for Visa MCP integration",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --ext .ts,.js,.mjs",
+    "lint:fix": "eslint . --ext .ts,.js,.mjs --fix",
+    "lint:check": "eslint . --ext .ts,.js,.mjs --max-warnings 0",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2"
+  }
+}

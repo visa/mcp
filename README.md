@@ -1,26 +1,12 @@
-# Visa Intelligent Commerce - Gemini CLI Extension
+# Visa Intelligent Commerce - MCP Integration Starter Kit
 
-A Gemini CLI extension that includes a tool with Visa Intelligent Commerce documentation
+This repository provides starter code, examples, and documentation to help external developers integrate their AI agents with Visa's Model Context Protocol (MCP) server. It includes Node.js/TypeScript client implementations, authentication patterns, and workflow examples for building agentic commerce experiences.
 
 ## Visa Intelligent Commerce
 
 Visa Intelligent Commerce is a new platform and product initiative that enables AI agents to securely browse, shop, and purchase on behalf of consumers, marking a major step toward an era of autonomous, AI-driven commerce experiences.
 
 Visa Intelligent Commerce provides a suite of integrated APIs, tokenized digital credentials, and commercial tools so that AI agents - like chatbots or virtual assistants - can complete transactions on behalf of users within limits set by the consumer. The system is designed to improve security, reduce fraud, and boost the personalization and efficiency of digital shopping experiences for both buyers and merchants.
-
-## 🚀 Installation
-
-### 1. Install Extension
-
-Install the extension using the `gemini extensions install` command:
-```bash
-gemini extensions install https://github.com/visa/mcp
-```
-
-### 2. Activate
-
-Restart the Gemini CLI.
-
 
 ### How It Works
 
@@ -36,5 +22,63 @@ Restart the Gemini CLI.
 
 ### Visa Agent APIs and Integration
 
-- [Visa developer center](https://developer.visa.com/capabilities/visa-Intelligent-commerce): Access to Visa Intelligent Commerce API
-- [Visa MCP Hub](https://mcp.visa.com): Connect to Visa’s Model Context Protocol (MCP) server to simplify the process of integrating Visa APIs into your agentic workflows.
+- [Visa developer center](https://developer.visa.com)
+- [Visa MCP Hub](https://mcp.visa.com)
+
+## 🚀 Getting Started with MCP Integration
+
+This repository is organized into key sections to help you integrate with Visa's MCP server:
+
+### 📦 Packages
+
+**Reusable packages for Visa MCP integration**
+
+The `packages/` directory contains shared packages that can be used across different implementations:
+
+- **[@vic/token-manager](./packages/token-manager)** - JWE token generation and management for Visa MCP authentication
+  - Automatic token refresh and caching
+  - Environment-based credential loading
+  - Zod schema validation
+
+### 👨‍💻 MCP Client
+
+**Node.js/TypeScript MCP client implementation**
+
+The `mcp-client/` directory contains a complete Node.js/TypeScript client demonstrating how to integrate Visa's MCP server into your AI agents.
+
+#### What You'll Find:
+
+- **🔐 Connection & Authentication**
+  - MCP server connection patterns using StreamableHTTP transport
+  - Automatic token management via @vic/token-manager
+  - Credential payload structure and requirements
+  - Required credentials breakdown (VIC API, VTS API, MLE certificates, JWT signing keys)
+
+- **⚙️ Tool Integration**
+  - Individual tool invocation examples (enroll-card, initiate-purchase-instruction, retrieve-payment-credentials, etc.)
+  - Expected input formats and payload builders
+  - Response structure samples and error handling
+  - Multi-tool workflow orchestration patterns
+
+#### Getting Started:
+See the [MCP Client README](./mcp-client/README.md) for detailed setup instructions and examples.
+
+## 🧩 Gemini CLI Extension
+
+A Gemini CLI extension that includes a tool with Visa Intelligent Commerce documentation
+
+### 1. Install Extension
+
+Install the extension using the `gemini extensions install` command:
+
+```bash
+gemini extensions install https://github.com/visa/mcp
+```
+
+### 2. Activate
+
+Restart the Gemini CLI.
+
+## 📄 License
+
+See LICENSE file for details

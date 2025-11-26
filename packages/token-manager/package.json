@@ -1,0 +1,35 @@
+{
+  "name": "@vic/token-manager",
+  "version": "1.0.0",
+  "description": "Visa token generation and management for MCP authentication",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "visa",
+    "token",
+    "authentication",
+    "jwe",
+    "mcp"
+  ],
+  "dependencies": {
+    "jose": "^5.9.6",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

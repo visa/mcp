@@ -1,0 +1,27 @@
+# Environment files - NEVER commit these
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Language-specific (Node.js)
+node_modules/
+package-lock.json
+dist/
+build/
+*.tsbuildinfo
+coverage/
+.eslintcache

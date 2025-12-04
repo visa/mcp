@@ -63,21 +63,27 @@ The `mcp-client/` directory contains a complete Node.js/TypeScript client demons
 #### Getting Started:
 See the [MCP Client README](./mcp-client/README.md) for detailed setup instructions and examples.
 
-## 🧩 Gemini CLI Extension
+## 📚 Visa Intelligent Commerce Documentation MCP Server
 
-A Gemini CLI extension that includes a tool with Visa Intelligent Commerce documentation
+A dedicated MCP server that provides AI agents with comprehensive integration guides, examples, and tool definitions to help automate MCP development.
 
-### 1. Install Extension
+**Learn more:** [VIC Documentation MCP Server Wiki](https://github.com/visa/mcp/wiki/VIC-Documentation-MCP-Server)
 
-Install the extension using the `gemini extensions install` command:
+### Key Features
 
-```bash
-gemini extensions install https://github.com/visa/mcp
-```
+- 🛠️ **get-docs** tool for retrieving structured documentation
+- 🔐 Authentication patterns and examples
+- 📋 Complete tool definitions and payload schemas
+- 💡 Best practices for AI-driven implementations
+- 🎥 Video walkthrough and usage examples
 
-### 2. Activate
+### Quick Access
 
-Restart the Gemini CLI.
+**Endpoint:** `https://sandbox.mcp.visa.com/mcp/doc`
+
+Use this server to give your AI agent the full knowledge base required to generate correct integration code and understand Visa MCP workflows.
+
+For detailed information, examples, and the **Gemini CLI extension** setup, visit the [Documentation MCP Server Wiki page](https://github.com/visa/mcp/wiki/VIC-Documentation-MCP-Server).
 
 ## 📄 License
 

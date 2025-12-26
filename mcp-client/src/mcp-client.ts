@@ -2,8 +2,10 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { Tool, ListToolsResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import * as dotenv from 'dotenv';
-import { z } from 'zod';
+import { z, ZodError, type ZodIssue } from 'zod';
 import { TokenManager } from '@vic/token-manager';
+import { createChildLogger } from './utils/logger.js';
+import { validateToolResponse } from './schemas/tool-responses.js';
 
 // Load environment variables
 dotenv.config();
@@ -18,6 +20,7 @@ const VisaMcpClientConfigSchema = z.object({
   clientName: z.string().optional().default('visa-mcp-client'),
   clientVersion: z.string().optional().default('1.0.0'),
   maxRetries: z.number().int().min(0).max(10).optional().default(2),
+  validateResponses: z.boolean().optional().default(true),
 });
 
 /**
@@ -35,6 +38,7 @@ export class VisaMcpClient {
   private tokenManager: TokenManager;
   private isConnected: boolean = false;
   private config: z.output<typeof VisaMcpClientConfigSchema>;
+  private logger = createChildLogger({ component: 'VisaMcpClient' });
 
   /**
    * Creates a new Visa MCP Client instance
@@ -76,7 +80,7 @@ export class VisaMcpClient {
       return;
     }
 
-    console.log('🔄 Token expired, reconnecting with new token...');
+    this.logger.info('Token expired, reconnecting with new token...');
 
     if (this.transport) {
       await this.client.close();
@@ -99,7 +103,7 @@ export class VisaMcpClient {
 
     await this.client.connect(this.transport);
     this.isConnected = true;
-    console.log('✓ Reconnected to MCP server');
+    this.logger.info('Reconnected to MCP server');
   }
 
   /**
@@ -108,7 +112,7 @@ export class VisaMcpClient {
    */
   async connect(): Promise<void> {
     if (this.isConnected) {
-      console.warn('⚠️ Already connected');
+      this.logger.warn('Already connected');
       return;
     }
 
@@ -128,7 +132,7 @@ export class VisaMcpClient {
 
     await this.client.connect(this.transport);
     this.isConnected = true;
-    console.log('✓ Connected to MCP server');
+    this.logger.info('Connected to MCP server');
   }
 
   /**
@@ -143,13 +147,68 @@ export class VisaMcpClient {
   }
 
   /**
+   * Performs a health check on the MCP server connection
+   * Verifies that the client is connected and can communicate with the server
+   *
+   * @returns Health check result with connection status and server info
+   */
+  async healthCheck(): Promise<{
+    status: 'healthy' | 'unhealthy';
+    connected: boolean;
+    serverReachable: boolean;
+    tokenValid: boolean;
+    availableTools?: number;
+    error?: string;
+  }> {
+    const result: {
+      status: 'healthy' | 'unhealthy';
+      connected: boolean;
+      serverReachable: boolean;
+      tokenValid: boolean;
+      availableTools?: number;
+      error?: string;
+    } = {
+      status: 'unhealthy',
+      connected: this.isConnected,
+      serverReachable: false,
+      tokenValid: false,
+    };
+
+    try {
+      // Check if connected
+      if (!this.isConnected) {
+        result.error = 'Client is not connected to the server';
+        this.logger.warn('Health check failed: not connected');
+        return result;
+      }
+
+      // Check token validity
+      result.tokenValid = !this.tokenManager.needsRefresh();
+
+      // Try to list tools to verify server reachability
+      const tools = await this.listTools();
+      result.serverReachable = true;
+      result.availableTools = tools.length;
+      result.status = 'healthy';
+
+      this.logger.info({ toolCount: tools.length }, 'Health check passed');
+      return result;
+    } catch (error) {
+      result.error = error instanceof Error ? error.message : String(error);
+      this.logger.error({ error: result.error }, 'Health check failed');
+      return result;
+    }
+  }
+
+  /**
    * Calls a tool on the Visa MCP server
-   * Automatically retries on authentication errors
+   * Automatically retries on authentication errors and validates responses
    *
    * @param toolName - Name of the tool to call
    * @param args - Arguments to pass to the tool
    * @param retryCount - Internal retry counter (do not use)
-   * @returns Tool execution result
+   * @returns Tool execution result (validated if schema exists)
+   * @throws {ZodError} If response validation fails
    */
   async callTool<T = unknown>(
     toolName: string,
@@ -170,7 +229,27 @@ export class VisaMcpClient {
         throw new Error(`MCP tool error: ${JSON.stringify(response)}`);
       }
 
-      return this.parseToolResponse<T>(response);
+      const parsedResponse = this.parseToolResponse<T>(response);
+
+      // Validate response if validation is enabled
+      if (this.config.validateResponses) {
+        try {
+          return validateToolResponse<T>(toolName, parsedResponse);
+        } catch (validationError) {
+          if (validationError instanceof ZodError) {
+            this.logger.error(
+              { toolName, errors: validationError.issues, response: parsedResponse },
+              'Response validation failed'
+            );
+            throw new Error(
+              `Response validation failed for ${toolName}: ${validationError.issues.map((e: ZodIssue) => `${e.path.join('.')}: ${e.message}`).join(', ')}`
+            );
+          }
+          throw validationError;
+        }
+      }
+
+      return parsedResponse;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
 
@@ -180,8 +259,9 @@ export class VisaMcpClient {
         errorMessage.includes('Unauthorized');
 
       if (isAuthError && retryCount < MAX_RETRIES) {
-        console.warn(
-          `⚠️ Auth error (attempt ${retryCount + 1}/${MAX_RETRIES + 1}), forcing token refresh...`
+        this.logger.warn(
+          { attempt: retryCount + 1, maxAttempts: MAX_RETRIES + 1, error: errorMessage },
+          'Auth error, forcing token refresh...'
         );
 
         this.tokenManager.clearCache();
@@ -246,7 +326,7 @@ export class VisaMcpClient {
     }
 
     this.tokenManager.clearCache();
-    console.log('✓ Disconnected from MCP server');
+    this.logger.info('Disconnected from MCP server');
   }
 }
 

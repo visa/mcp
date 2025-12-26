@@ -12,7 +12,9 @@
   },
   "scripts": {
     "build": "cd ../packages/token-manager && npm install && npm run build && cd ../../mcp-client && npm install",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts,.js,.mjs",
     "lint:fix": "eslint . --ext .ts,.js,.mjs --fix",
     "lint:check": "eslint . --ext .ts,.js,.mjs --max-warnings 0",
@@ -33,18 +35,22 @@
     "@vic/token-manager": "file:../packages/token-manager",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.4.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=18.0.0"

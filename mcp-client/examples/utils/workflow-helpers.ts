@@ -1,4 +1,7 @@
 import { createVisaMcpClient, type VisaMcpClient } from '../../src/mcp-client.js';
+import { createChildLogger } from '../../src/utils/logger.js';
+
+const logger = createChildLogger({ component: 'WorkflowHelper' });
 
 /**
  * Runs a workflow with automatic client lifecycle management, cleanup, and signal handling
@@ -26,26 +29,26 @@ export async function runWorkflow(
   workflowName: string,
   workflowFn: (client: VisaMcpClient) => Promise<void>
 ): Promise<void> {
-  console.log(`=== ${workflowName} Workflow ===\n`);
+  logger.info(`=== ${workflowName} Workflow ===\n`);
 
   let client: VisaMcpClient | null = null;
 
   // Setup graceful shutdown
   const cleanup = async (): Promise<void> => {
     if (client) {
-      console.log('\n🧹 Cleaning up...');
+      logger.info('Cleaning up...');
       await client.close();
-      console.log('✓ Connection closed');
+      logger.info('Connection closed');
     }
   };
 
   // Handle signals
   const handleShutdown = (signal: string): void => {
-    console.log(`\n\nReceived ${signal}, shutting down gracefully...`);
+    logger.info(`Received ${signal}, shutting down gracefully...`);
     cleanup()
       .then(() => process.exit(0))
       .catch((error) => {
-        console.error('Error during cleanup:', error);
+        logger.error({ error }, 'Error during cleanup');
         process.exit(1);
       });
   };
@@ -55,21 +58,18 @@ export async function runWorkflow(
 
   try {
     // Connect to MCP server
-    console.log('🔌 Connecting to Visa MCP server...');
+    logger.info('Connecting to Visa MCP server...');
     client = await createVisaMcpClient();
-    console.log(' ✅ Connected successfully\n');
+    logger.info('Connected successfully\n');
 
     // Execute workflow logic
     await workflowFn(client);
 
-    console.log('\n=== Workflow completed successfully ===');
+    logger.info('Workflow completed successfully');
   } catch (error) {
-    console.error('\n❌ Workflow failed:', error);
+    logger.error({ error }, 'Workflow failed');
     if (error instanceof Error) {
-      console.error('   Error message:', error.message);
-      if (error.stack) {
-        console.error('   Stack trace:', error.stack);
-      }
+      logger.error({ message: error.message, stack: error.stack }, 'Error details');
     }
     process.exit(1);
   } finally {

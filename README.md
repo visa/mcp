@@ -1,6 +1,6 @@
-# Visa Intelligent Commerce - MCP Integration Starter Kit
+# Visa Intelligent Commerce (VIC) - MCP Integration Starter Kit
 
-This repository provides starter code, examples, and documentation to help external developers integrate their AI agents with Visa's Model Context Protocol (MCP) server. It includes Node.js/TypeScript client implementations, authentication patterns, and workflow examples for building agentic commerce experiences.
+This repository provides starter code, examples, and documentation to help external developers integrate their AI agents with VIC Model Context Protocol (MCP) server. It includes Node.js/TypeScript client implementations, authentication patterns, and workflow examples for building agentic commerce experiences.
 
 ## Visa Intelligent Commerce
 
@@ -20,48 +20,92 @@ Visa Intelligent Commerce provides a suite of integrated APIs, tokenized digital
 - **Implement transaction controls**: When authorization requests are received by VisaNet, controls will be enforce to ensure that the request originates from the intended merchant for the correct amount.
 - **Share commerce signals**: The agent will share the outcome of the purchase made at the merchant with the Visa Intelligent Commerce platform. These signals, along with the user instructions can be used to resolve any disputes that may arise.
 
-### Visa Agent APIs and Integration
+### Visa APIs and Integration
 
-- [Visa developer center](https://developer.visa.com)
-- [Visa MCP Hub](https://mcp.visa.com)
+- [Visa Intelligent Commerce Capabilities](https://developer.visa.com/capabilities/visa-intelligent-commerce) - Overview of VIC features and capabilities
+- [Visa Developer Center](https://developer.visa.com) - Main portal for Visa API documentation, credentials, and testing environments
+- [Visa MCP Hub](https://mcp.visa.com) - Central hub for Model Context Protocol server information and integration
+- [Visa Developer Quick Start Guide](https://developer.visa.com/pages/working-with-visa-apis/visa-developer-quick-start-guide) - Getting started with Visa APIs
+- [X-Pay Token Authentication](https://developer.visa.com/pages/working-with-visa-apis/x-pay-token) - Guide for implementing X-Pay token-based authentication
+- [Encryption Guide](https://developer.visa.com/pages/encryption_guide) - Message Level Encryption (MLE) documentation and best practices
 
 ## 🚀 Getting Started with MCP Integration
 
-This repository is organized into key sections to help you integrate with Visa's MCP server:
+This repository is organized into key sections to help you integrate with VIC MCP server:
 
 ### 📦 Packages
 
-**Reusable packages for Visa MCP integration**
+**Reusable packages for VIC MCP integration**
 
 The `packages/` directory contains shared packages that can be used across different implementations:
 
-- **[@vic/token-manager](./packages/token-manager)** - JWE token generation and management for Visa MCP authentication
+- **[@vic/token-manager](./packages/token-manager)** - JWE token generation and management for VIC MCP authentication
   - Automatic token refresh and caching
   - Environment-based credential loading
   - Zod schema validation
 
-### 👨‍💻 MCP Client
+- **[@vic/mcp-client](./packages/mcp-client)** - Node.js/TypeScript MCP client for connecting to VIC MCP servers
+  - Automatic authentication and token refresh
+  - Tool discovery and execution
+  - Type-safe API with comprehensive error handling
 
-**Node.js/TypeScript MCP client implementation**
+- **[@vic/api-client](./packages/api-client)** - Direct API client for VIC with X-Pay authentication and MLE
+  - X-Pay token authentication (HMAC-SHA256)
+  - Automatic MLE encryption/decryption
+  - Complete VIC API coverage
+  - Environment-based configuration
 
-The `mcp-client/` directory contains a complete Node.js/TypeScript client demonstrating how to integrate Visa's MCP server into your AI agents.
+### 👨‍💻 Client Usage Examples
 
-#### What You'll Find:
+**Working examples demonstrating VIC client integrations**
 
-- **🔐 Connection & Authentication**
-  - MCP server connection patterns using StreamableHTTP transport
-  - Automatic token management via @vic/token-manager
-  - Credential payload structure and requirements
-  - Required credentials breakdown (VIC API, VTS API, MLE certificates, JWT signing keys)
+The `apps/` directory contains independent example packages:
 
-- **⚙️ Tool Integration**
+- **🔐 MCP Client Examples ([mcp-examples/](./apps/mcp-examples))**
+  - MCP server connection examples using StreamableHTTP transport
+  - Automatic token management patterns
   - Individual tool invocation examples (enroll-card, initiate-purchase-instruction, retrieve-payment-credentials, etc.)
-  - Expected input formats and payload builders
-  - Response structure samples and error handling
   - Multi-tool workflow orchestration patterns
+  - Complete with dependencies, configs, and documentation
 
-#### Getting Started:
-See the [MCP Client README](./mcp-client/README.md) for detailed setup instructions and examples.
+- **🚀 API Client Examples ([api-examples/](./apps/api-examples))**
+  - Direct REST API integration examples using VicApiClient
+  - X-Pay token authentication and MLE encryption patterns
+  - End-to-end workflow examples (create/cancel instructions, update instructions, retrieve credentials)
+  - Error handling and response processing patterns
+  - Complete with dependencies, configs, and documentation
+
+## 🏗️ Building the Project
+
+This repository uses npm workspaces with Turbo for efficient build orchestration.
+
+### Initial Setup
+
+```bash
+# Install all dependencies (one command for everything)
+npm install
+```
+
+This installs dependencies for all packages and apps at once, using npm workspaces to hoist shared dependencies to the root.
+
+### Build Commands
+
+```bash
+# Build all packages and apps
+npm run build
+
+# Build only packages (token-manager, mcp-client, api-client)
+npm run build:packages
+
+# Build only apps (mcp-examples, api-examples)
+npm run build:apps
+
+# Build packages and agent
+npm run build:agent
+
+# Clean all build artifacts
+npm run clean
+```
 
 ## 📚 Visa Intelligent Commerce Documentation MCP Server
 

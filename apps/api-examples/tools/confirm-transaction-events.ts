@@ -1,0 +1,59 @@
+import type { VicApiClient } from '@vic/api-client';
+import { buildConfirmTransactionEventsPayload } from '@vic/shared-utils/payload-builders';
+import type { WorkflowContext } from '@vic/shared-utils/constants';
+import { extractInstructionId } from '../utils/api-helpers.js';
+
+/**
+ * Parameters for confirming transaction events
+ */
+export interface ConfirmTransactionEventsParams {
+  instructionId: string;
+  transactionReferenceId: string;
+  context: WorkflowContext;
+}
+
+/**
+ * Response structure for confirm-transaction-events API call
+ */
+export interface ConfirmTransactionEventsResponse {
+  data: {
+    clientReferenceId: string;
+    instructionId: string;
+    status?: string;
+    pendingEvents?: string[];
+  };
+  correlationId?: string;
+}
+
+/**
+ * Calls the send-confirmations API endpoint with constructed payload
+ *
+ * @param client - VicApiClient instance
+ * @param params - Parameters including instructionId, transactionReferenceId, and workflow context
+ * @returns Response from send-confirmations API with confirmation details
+ * @throws Error if API call fails
+ */
+export async function confirmTransactionEvents(
+  client: VicApiClient,
+  params: ConfirmTransactionEventsParams
+): Promise<ConfirmTransactionEventsResponse> {
+  console.log('\n 📋 Step: Confirming transaction events...');
+
+  // Build the payload using configuration and utilities
+  const payload = buildConfirmTransactionEventsPayload(
+    params.instructionId,
+    params.transactionReferenceId,
+    params.context
+  );
+  const { instructionId, body } = extractInstructionId(payload);
+
+  const response = await client.sendConfirmations<ConfirmTransactionEventsResponse>(
+    instructionId,
+    body
+  );
+
+  console.log('  ✅ Transaction events confirmed successfully');
+  console.log(' Full response:', JSON.stringify(response, null, 2));
+
+  return response;
+}

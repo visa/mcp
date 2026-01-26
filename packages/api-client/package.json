@@ -1,7 +1,7 @@
 {
-  "name": "@vic/token-manager",
+  "name": "@vic/api-client",
   "version": "1.0.0",
-  "description": "Visa token generation and management for MCP authentication",
+  "description": "VIC API client for direct VIC API calls with X-Pay authentication and MLE encryption",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -20,14 +20,18 @@
   },
   "keywords": [
     "visa",
-    "token",
-    "authentication",
-    "jwe",
-    "mcp"
+    "vic",
+    "vacp",
+    "api-client",
+    "x-pay",
+    "mle"
   ],
   "dependencies": {
-    "jose": "^5.9.6",
+    "node-jose": "^2.2.0",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node-jose": "^1.1.13"
   },
   "engines": {
     "node": ">=18.0.0"

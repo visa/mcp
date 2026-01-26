@@ -4,7 +4,7 @@ Visa token generation and management for MCP (Model Context Protocol) authentica
 
 ## Overview
 
-This package provides JWE (JSON Web Encryption) token generation, caching, and automatic refresh functionality for authenticating with Visa's MCP servers. It handles the complete token lifecycle including credential loading, JWT signing, and JWE encryption.
+This package provides JWE (JSON Web Encryption) token generation, caching, and automatic refresh functionality for authenticating with VIC MCP server. It handles the complete token lifecycle including credential loading, JWT signing, and JWE encryption.
 
 ## Features
 
@@ -148,3 +148,12 @@ The token generation process follows these steps:
 3. **Sign JWT**: Signs the payload using RS256 algorithm
 4. **Encrypt to JWE**: Encrypts the signed JWT using RSA-OAEP-256
 5. **Cache Token**: Stores the token with expiration tracking
+
+## Used By
+
+This package is used by:
+
+- **[@vic/mcp-client](../mcp-client)** - Main MCP client for server communication
+- **[agent/apps/agent](../../agent)** - LangGraph agent implementation
+- **[mcp-examples](../../apps/mcp-examples)** - MCP usage examples and workflow demonstrations
+- **[api-examples](../../apps/api-examples)** - API usage examples (coming soon)

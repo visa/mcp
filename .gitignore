@@ -1,27 +1,79 @@
-# Environment files - NEVER commit these
-.env
-.env.local
-.env.*.local
+# ENVIRONMENT
+**/.env
+**/.env.local
+**/.env.*.local
 
-# IDE
+!.env.example
+!**/.env.example
+
+# OS FILES
+.DS_Store
+Thumbs.db
+
+# LOGS
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+logs/
+
+# EDITORS / IDE
 .vscode/
+!.vscode/extensions.json
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# Language-specific (Node.js)
+# NODE / JAVASCRIPT / TYPESCRIPT
 node_modules/
-package-lock.json
+**/node_modules/
+
 dist/
 build/
-*.tsbuildinfo
+**/dist/
+**/build/
+**/dist-ssr/
+
 coverage/
+**/coverage/
+
+*.tsbuildinfo
 .eslintcache
+
+package-lock.json
+**/package-lock.json
+
+# Yarn / PnP / Turbo
+.pnp
+.pnp.js
+.yarn/
+.turbo/
+**/.turbo/
+
+# NEXT.JS (for all subprojects)
+**/.next/
+**/out/
+**/next-env.d.ts
+
+# GENERAL FRONTEND
+# SSL certificates
+agent/apps/web/.certs/
+agent/apps/web/*.pem
+*.pem
+
+# CLAUDE / MISC
+settings.local.json
+**/settings.local.json
+
+# LANGUAGEGRAPH / CREDENTIALS / PROJECT SECRETS
+**/.langgraph_api
+**/credentials.json
+**/secrets.json

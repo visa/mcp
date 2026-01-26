@@ -1,0 +1,39 @@
+{
+  "name": "visa-mcp-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Visa Intelligent Commerce MCP Integration Starter Kit",
+  "packageManager": "npm@11.6.2",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "build:packages": "turbo build --filter='./packages/*'",
+    "build:apps": "turbo build --filter='./apps/*'",
+    "build:agent": "cd agent && npm run build",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "format": "turbo format",
+    "clean": "turbo clean"
+  },
+  "keywords": [
+    "visa",
+    "mcp",
+    "intelligent-commerce",
+    "model-context-protocol"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.1",
+    "turbo": "latest",
+    "typescript": "^5.7.2"
+  }
+}

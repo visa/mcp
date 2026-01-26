@@ -36,35 +36,6 @@ export function buildClientObject(): Record<string, unknown> {
 }
 
 /**
- * Extracts instructionId from payload (for URL) and returns clean body
- * Used for cancel/update/credentials/confirmations API calls
- */
-export function extractInstructionId<T extends Record<string, unknown>>(
-  payload: T
-): { instructionId: string; body: Omit<T, 'instructionId'> } {
-  const { instructionId, ...body } = payload;
-
-  if (!instructionId || typeof instructionId !== 'string') {
-    throw new Error('instructionId is required in payload');
-  }
-
-  return { instructionId, body };
-}
-
-/**
- * Adds client object to payload for API calls that require it
- * (enrollCard, initiate/update instructions, getTransactionCredentials)
- */
-export function addClientToPayload<T extends Record<string, unknown>>(
-  payload: T
-): T & { client: Record<string, unknown> } {
-  return {
-    ...payload,
-    client: buildClientObject(),
-  };
-}
-
-/**
  * Handles and logs workflow errors with detailed information
  * Checks for VicApiError properties (correlationId, status) and logs them
  * @param error - The error to handle

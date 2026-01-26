@@ -15,19 +15,21 @@ import {
  * @param consumerId - Consumer identifier
  * @param enrollmentReferenceId - Token reference ID from VTS
  * @param context - Workflow context containing shared correlation identifiers
+ * @param client - Optional client object (included in payload only if provided)
  * @returns Complete enroll-card payload object
  */
 export function buildEnrollCardPayload(
-  consumerId: string,
-  enrollmentReferenceId: string,
-  context: WorkflowContext
+    consumerId: string,
+    enrollmentReferenceId: string,
+    context: WorkflowContext,
+    client?: Record<string, unknown>
 ): Record<string, unknown> {
   const consentId = crypto.randomUUID();
   const acceptedTime = generateTimestamp();
   const effectiveUntil = generateEffectiveUntil(1);
   const nationalIdentifier = generateNationalIdentifier(CONSUMER_CONFIG.countryCode);
 
-  return {
+  const payload: Record<string, unknown> = {
     clientReferenceId: context.clientReferenceId,
     consumer: {
       consumerId,
@@ -60,4 +62,10 @@ export function buildEnrollCardPayload(
       },
     ],
   };
+
+  if (client) {
+    payload.client = client;
+  }
+
+  return payload;
 }

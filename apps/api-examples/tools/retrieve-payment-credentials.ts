@@ -1,7 +1,7 @@
 import type { VicApiClient } from '@vic/api-client';
 import { buildRetrievePaymentCredentialsPayload } from '@vic/shared-utils/payload-builders';
 import type { WorkflowContext } from '@vic/shared-utils/constants';
-import { addClientToPayload, extractInstructionId } from '../utils/api-helpers.js';
+import { buildClientObject } from '../utils/api-helpers.js';
 
 /**
  * Parameters for retrieving payment credentials
@@ -55,17 +55,16 @@ export async function retrievePaymentCredentials(
   }
 
   // Build the payload using configuration and utilities
-  const payload = buildRetrievePaymentCredentialsPayload(
-    params.instructionId,
+  const body = buildRetrievePaymentCredentialsPayload(
     tokenId,
     params.transactionReferenceId,
-    params.context
+    params.context,
+    undefined,
+    buildClientObject()
   );
-  const payloadWithClient = addClientToPayload(payload);
-  const { instructionId, body } = extractInstructionId(payloadWithClient);
 
   const response = await client.getTransactionCredentials<RetrievePaymentCredentialsResponse>(
-    instructionId,
+    params.instructionId,
     body
   );
 

@@ -3,21 +3,22 @@ import { generateTimestamp } from '../payload-helpers.js';
 
 /**
  * Builds the complete confirm-transaction-events payload
- * @param instructionId - The instruction identifier from initiate-purchase-instruction
  * @param transactionReferenceId - The transaction reference ID used in retrieve-payment-credentials
  * @param context - Workflow context containing shared correlation identifiers
+ * @param instructionId - Optional instruction identifier (included in payload only if provided)
+ * @param client - Optional client object (included in payload only if provided)
  * @returns Complete confirm-transaction-events payload object
  */
 export function buildConfirmTransactionEventsPayload(
-  instructionId: string,
-  transactionReferenceId: string,
-  context: WorkflowContext
+    transactionReferenceId: string,
+    context: WorkflowContext,
+    instructionId?: string,
+    client?: Record<string, unknown>
 ): Record<string, unknown> {
   const currentTimestamp = generateTimestamp();
   const futureTimestamp = (parseInt(currentTimestamp) + 86400 * 7).toString();
 
-  return {
-    instructionId,
+  const payload: Record<string, unknown> = {
     clientReferenceId: context.clientReferenceId,
     confirmationData: [
       {
@@ -75,4 +76,14 @@ export function buildConfirmTransactionEventsPayload(
       },
     ],
   };
+
+  if (instructionId) {
+    payload.instructionId = instructionId;
+  }
+
+  if (client) {
+    payload.client = client;
+  }
+
+  return payload;
 }

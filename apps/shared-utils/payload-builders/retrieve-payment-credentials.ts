@@ -2,20 +2,21 @@ import { WorkflowContext } from '../constants.js';
 
 /**
  * Builds the complete retrieve-payment-credentials payload
- * @param instructionId - The instruction identifier from initiate-purchase-instruction
  * @param tokenId - Token reference ID (same as enrollmentReferenceId)
  * @param transactionReferenceId - The transaction reference ID to use for this transaction
  * @param context - Workflow context containing shared correlation identifiers
+ * @param instructionId - Optional instruction identifier (included in payload only if provided)
+ * @param client - Optional client object (included in payload only if provided)
  * @returns Complete retrieve-payment-credentials payload object
  */
 export function buildRetrievePaymentCredentialsPayload(
-  instructionId: string,
-  tokenId: string,
-  transactionReferenceId: string,
-  context: WorkflowContext
+    tokenId: string,
+    transactionReferenceId: string,
+    context: WorkflowContext,
+    instructionId?: string,
+    client?: Record<string, unknown>
 ): Record<string, unknown> {
-  return {
-    instructionId,
+  const payload: Record<string, unknown> = {
     clientReferenceId: context.clientReferenceId,
     tokenId,
     transactionData: [
@@ -51,4 +52,14 @@ export function buildRetrievePaymentCredentialsPayload(
       },
     ],
   };
+
+  if (instructionId) {
+    payload.instructionId = instructionId;
+  }
+
+  if (client) {
+    payload.client = client;
+  }
+
+  return payload;
 }

@@ -38,7 +38,7 @@ export async function retrievePaymentCredentials(
   client: VisaMcpClient,
   params: RetrievePaymentCredentialsParams
 ): Promise<RetrievePaymentCredentialsResponse> {
-  console.log('\n📋 Step: Retrieving payment credentials...');
+  console.log('\n 📋 Step: Retrieving payment credentials...');
 
   // Read configuration from environment variables
   const tokenId = process.env.VISA_ENROLLMENT_REFERENCE_ID;
@@ -53,10 +53,10 @@ export async function retrievePaymentCredentials(
 
   // Build the payload using configuration and utilities
   const payload = buildRetrievePaymentCredentialsPayload(
-    params.instructionId,
     tokenId,
     params.transactionReferenceId,
-    params.context
+    params.context,
+    params.instructionId
   );
 
   const response = await client.callTool<RetrievePaymentCredentialsResponse>(

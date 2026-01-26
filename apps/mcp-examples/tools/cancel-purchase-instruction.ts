@@ -38,14 +38,14 @@ export async function cancelPurchaseInstruction(
   console.log('\n 📋 Step: Cancelling purchase instruction...');
 
   // Build the payload using configuration and utilities
-  const payload = buildCancelPurchaseInstructionPayload(params.instructionId, params.context);
+  const payload = buildCancelPurchaseInstructionPayload(params.context, params.instructionId);
 
   const response = await client.callTool<CancelPurchaseInstructionResponse>(
     'cancel-purchase-instruction',
     payload
   );
 
-  console.log('  ✅ Purchase instruction cancelled successfully');
+  console.log(' ✅ Purchase instruction cancelled successfully');
   console.log(JSON.stringify(response, null, 2));
 
   return response;

@@ -1,7 +1,7 @@
 import type { VicApiClient } from '@vic/api-client';
 import { buildEnrollCardPayload } from '@vic/shared-utils/payload-builders';
 import type { WorkflowContext } from '@vic/shared-utils/constants';
-import { addClientToPayload } from '../utils/api-helpers.js';
+import { buildClientObject } from '../utils/api-helpers.js';
 
 /**
  * Response structure for enroll-card API call
@@ -42,10 +42,14 @@ export async function enrollCard(
   }
 
   // Build the payload using configuration and utilities
-  const payload = buildEnrollCardPayload(consumerId, enrollmentReferenceId, context);
-  const payloadWithClient = addClientToPayload(payload);
+  const payload = buildEnrollCardPayload(
+    consumerId,
+    enrollmentReferenceId,
+    context,
+    buildClientObject()
+  );
 
-  const response = await client.enrollCard<EnrollCardResponse>(payloadWithClient);
+  const response = await client.enrollCard<EnrollCardResponse>(payload);
 
   console.log('  ✅ Card enrolled successfully');
   console.log(' Full response:', JSON.stringify(response, null, 2));

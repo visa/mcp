@@ -51,10 +51,10 @@ export async function updatePurchaseInstruction(
 
   // Build the payload using configuration and utilities
   const payload = buildUpdatePurchaseInstructionPayload(
-    params.instructionId,
     consumerId,
     tokenId,
-    params.context
+    params.context,
+    params.instructionId
   );
 
   const response = await client.callTool<UpdatePurchaseInstructionResponse>(
@@ -62,7 +62,7 @@ export async function updatePurchaseInstruction(
     payload
   );
 
-  console.log(' ✅ Purchase instruction updated successfully');
+  console.log('  ✅ Purchase instruction updated successfully');
   console.log(JSON.stringify(response, null, 2));
 
   return response;

@@ -6,16 +6,18 @@ import { generateTimestamp, buildMandate } from '../payload-helpers.js';
  * @param consumerId - Consumer identifier
  * @param tokenId - Token reference ID (same as enrollmentReferenceId)
  * @param context - Workflow context containing shared correlation identifiers
+ * @param client - Optional client object (included in payload only if provided)
  * @returns Complete initiate-purchase-instruction payload object
  */
 export function buildInitiatePurchaseInstructionPayload(
-  consumerId: string,
-  tokenId: string,
-  context: WorkflowContext
+    consumerId: string,
+    tokenId: string,
+    context: WorkflowContext,
+    client?: Record<string, unknown>
 ): Record<string, unknown> {
   const verificationTimestamp = generateTimestamp();
 
-  return {
+  const payload: Record<string, unknown> = {
     clientReferenceId: context.clientReferenceId,
     appInstance: {
       ...APP_INSTANCE_BASE,
@@ -32,4 +34,10 @@ export function buildInitiatePurchaseInstructionPayload(
     mandates: [buildMandate()],
     consumerPrompt: 'Purchase authorization mandate',
   };
+
+  if (client) {
+    payload.client = client;
+  }
+
+  return payload;
 }

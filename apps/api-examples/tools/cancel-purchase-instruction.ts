@@ -1,7 +1,6 @@
 import type { VicApiClient } from '@vic/api-client';
 import { buildCancelPurchaseInstructionPayload } from '@vic/shared-utils/payload-builders';
 import type { WorkflowContext } from '@vic/shared-utils/constants';
-import { extractInstructionId } from '../utils/api-helpers.js';
 
 /**
  * Parameters for cancelling a purchase instruction
@@ -39,11 +38,10 @@ export async function cancelPurchaseInstruction(
   console.log('\n 📋 Step: Cancelling purchase instruction...');
 
   // Build the payload using configuration and utilities
-  const payload = buildCancelPurchaseInstructionPayload(params.instructionId, params.context);
-  const { instructionId, body } = extractInstructionId(payload);
+  const body = buildCancelPurchaseInstructionPayload(params.context);
 
   const response = await client.cancelPurchaseInstruction<CancelPurchaseInstructionResponse>(
-    instructionId,
+    params.instructionId,
     body
   );
 

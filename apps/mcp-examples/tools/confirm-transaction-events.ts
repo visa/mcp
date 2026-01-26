@@ -37,9 +37,9 @@ export async function confirmTransactionEvents(
 
   // Build the payload using configuration and utilities
   const payload = buildConfirmTransactionEventsPayload(
-    params.instructionId,
     params.transactionReferenceId,
-    params.context
+    params.context,
+    params.instructionId
   );
 
   const response = await client.callTool<ConfirmTransactionEventsResponse>(

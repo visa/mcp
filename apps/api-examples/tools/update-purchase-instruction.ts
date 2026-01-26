@@ -1,7 +1,7 @@
 import type { VicApiClient } from '@vic/api-client';
 import { buildUpdatePurchaseInstructionPayload } from '@vic/shared-utils/payload-builders';
 import type { WorkflowContext } from '@vic/shared-utils/constants';
-import { addClientToPayload, extractInstructionId } from '../utils/api-helpers.js';
+import { buildClientObject } from '../utils/api-helpers.js';
 
 /**
  * Parameters for updating a purchase instruction
@@ -51,17 +51,16 @@ export async function updatePurchaseInstruction(
   }
 
   // Build the payload using configuration and utilities
-  const payload = buildUpdatePurchaseInstructionPayload(
-    params.instructionId,
+  const body = buildUpdatePurchaseInstructionPayload(
     consumerId,
     tokenId,
-    params.context
+    params.context,
+    undefined,
+    buildClientObject()
   );
-  const payloadWithClient = addClientToPayload(payload);
-  const { instructionId, body } = extractInstructionId(payloadWithClient);
 
   const response = await client.updatePurchaseInstruction<UpdatePurchaseInstructionResponse>(
-    instructionId,
+    params.instructionId,
     body
   );
 

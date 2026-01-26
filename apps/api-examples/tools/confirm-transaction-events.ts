@@ -1,7 +1,6 @@
 import type { VicApiClient } from '@vic/api-client';
 import { buildConfirmTransactionEventsPayload } from '@vic/shared-utils/payload-builders';
 import type { WorkflowContext } from '@vic/shared-utils/constants';
-import { extractInstructionId } from '../utils/api-helpers.js';
 
 /**
  * Parameters for confirming transaction events
@@ -40,15 +39,10 @@ export async function confirmTransactionEvents(
   console.log('\n 📋 Step: Confirming transaction events...');
 
   // Build the payload using configuration and utilities
-  const payload = buildConfirmTransactionEventsPayload(
-    params.instructionId,
-    params.transactionReferenceId,
-    params.context
-  );
-  const { instructionId, body } = extractInstructionId(payload);
+  const body = buildConfirmTransactionEventsPayload(params.transactionReferenceId, params.context);
 
   const response = await client.sendConfirmations<ConfirmTransactionEventsResponse>(
-    instructionId,
+    params.instructionId,
     body
   );
 

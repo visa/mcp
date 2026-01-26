@@ -1,7 +1,7 @@
 import type { VicApiClient } from '@vic/api-client';
 import { buildInitiatePurchaseInstructionPayload } from '@vic/shared-utils/payload-builders';
 import type { WorkflowContext } from '@vic/shared-utils/constants';
-import { addClientToPayload } from '../utils/api-helpers.js';
+import { buildClientObject } from '../utils/api-helpers.js';
 
 /**
  * Response structure for initiate-purchase-instruction API call
@@ -42,13 +42,15 @@ export async function initiatePurchaseInstruction(
     );
   }
 
-  const payload = buildInitiatePurchaseInstructionPayload(consumerId, tokenId, context);
-  const payloadWithClient = addClientToPayload(payload);
+  const payload = buildInitiatePurchaseInstructionPayload(
+    consumerId,
+    tokenId,
+    context,
+    buildClientObject()
+  );
 
   const response =
-    await client.initiatePurchaseInstruction<InitiatePurchaseInstructionResponse>(
-      payloadWithClient
-    );
+    await client.initiatePurchaseInstruction<InitiatePurchaseInstructionResponse>(payload);
 
   console.log('  ✅ Purchase instruction initiated successfully');
   console.log(' Full response:', JSON.stringify(response, null, 2));

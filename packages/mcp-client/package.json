@@ -1,0 +1,36 @@
+{
+  "name": "@vic/mcp-client",
+  "version": "1.0.0",
+  "description": "Visa MCP (Model Context Protocol) Client for Node.js",
+  "main": "dist/mcp-client.js",
+  "types": "dist/mcp-client.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/mcp-client.d.ts",
+      "default": "./dist/mcp-client.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "lint": "eslint . --ext .ts,.js,.mjs",
+    "lint:fix": "eslint . --ext .ts,.js,.mjs --fix",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "visa",
+    "mcp",
+    "model-context-protocol",
+    "api-client"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@vic/token-manager": "file:../token-manager",
+    "dotenv": "^16.4.7",
+    "zod": "^3.23.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@vic/shared-utils",
+  "version": "1.0.0",
+  "description": "Shared utilities for MCP and API examples",
+  "type": "module",
+  "exports": {
+    "./constants": "./constants.js",
+    "./payload-helpers": "./payload-helpers.js",
+    "./payload-builders": "./payload-builders/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.7.3"
+  }
+}

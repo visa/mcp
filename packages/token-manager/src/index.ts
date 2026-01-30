@@ -31,6 +31,8 @@ export const VisaCredentialsSchema = z.object({
   externalAppId: z.string().min(1, 'External app ID is required'),
   keyId: z.string().min(1, 'Key ID is required'),
   baseUrl: z.string().min(1, 'Base URL is required'),
+  authorization: z.string().optional(),
+  relationshipId: z.string().optional(),
 });
 
 export type VisaCredentials = z.infer<typeof VisaCredentialsSchema>;
@@ -81,6 +83,8 @@ export function loadVisaCredentials(): VisaCredentials {
       externalAppId: getEnvVar('EXTERNAL_APP_ID'),
       keyId: getEnvVar('KEY_ID'),
       baseUrl: getEnvVar('MCP_BASE_URL'),
+      authorization: getEnvVar('AUTHORIZATION', false) || undefined,
+      relationshipId: getEnvVar('RELATIONSHIP_ID', false) || undefined,
     };
 
     return VisaCredentialsSchema.parse(credentials);
@@ -169,6 +173,8 @@ export async function createVisaJweToken(
     mle_key_id: credentials.keyId,
     external_client_id: credentials.externalClientId,
     external_app_id: credentials.externalAppId,
+    ...(credentials.authorization && { authorization: credentials.authorization }),
+    ...(credentials.relationshipId && { relationship_id: credentials.relationshipId }),
     iat: now,
     exp: expiresAtSeconds,
     iss: credentials.baseUrl,

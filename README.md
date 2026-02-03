@@ -28,10 +28,13 @@ Visa Intelligent Commerce provides a suite of integrated APIs, tokenized digital
 - [Visa Developer Quick Start Guide](https://developer.visa.com/pages/working-with-visa-apis/visa-developer-quick-start-guide) - Getting started with Visa APIs
 - [X-Pay Token Authentication](https://developer.visa.com/pages/working-with-visa-apis/x-pay-token) - Guide for implementing X-Pay token-based authentication
 - [Encryption Guide](https://developer.visa.com/pages/encryption_guide) - Message Level Encryption (MLE) documentation and best practices
+## 🚀 Getting Started
 
-## 🚀 Getting Started with MCP Integration
+This repository provides **two integration approaches** for Visa Intelligent Commerce:
+- **MCP-Based Integration** - Use the Model Context Protocol with StreamableHTTP transport for standardized AI agent integration
+- **Direct API Integration** - Use direct REST API calls with X-Pay authentication and MLE encryption
 
-This repository is organized into key sections to help you integrate with VIC MCP server:
+Both approaches provide the same VIC capabilities. This repository is organized into key sections to help you integrate:
 
 ### 📦 Packages
 
@@ -74,6 +77,23 @@ The `apps/` directory contains independent example packages:
   - End-to-end workflow examples (create/cancel instructions, update instructions, retrieve credentials)
   - Error handling and response processing patterns
   - Complete with dependencies, configs, and documentation
+### 🤖 Agent Demo
+
+**Complete end-to-end example of adding a Visa card to VIC**
+
+The [agent/](./agent) directory contains an end-to-end demonstration of the full card enrollment workflow using an AI agent.
+
+- LangGraphJS-powered AI agent with Next.js conversational UI
+- **Full VIC card enrollment workflow:**
+  - Card tokenization via VTS
+  - Device binding with FIDO authentication
+  - Step-up verification
+  - Visa Payment Passkey creation
+  - Assurance data collection and VIC enrollment (`enroll-card`)
+- Interactive multi-step flow demonstrating real-world cardholder verification
+- Ready to run locally with your Visa credentials
+
+See the [agent setup instructions](./agent/README.md) for configuration details.
 
 ## 🏗️ Building the Project
 
@@ -109,7 +129,7 @@ npm run clean
 
 ## 📚 Visa Intelligent Commerce Documentation MCP Server
 
-A dedicated MCP server that provides AI agents with comprehensive integration guides, examples, and tool definitions to help automate MCP development.
+A dedicated MCP server that provides AI agents with comprehensive integration guides, examples, and tool definitions for both MCP and direct API integration approaches.
 
 **Learn more:** [VIC Documentation MCP Server Wiki](https://github.com/visa/mcp/wiki/VIC-Documentation-MCP-Server)
 
@@ -119,6 +139,8 @@ A dedicated MCP server that provides AI agents with comprehensive integration gu
 - 🔐 Authentication patterns and examples
 - 📋 Complete tool definitions and payload schemas
 - 💡 Best practices for AI-driven implementations
+- 🔌 MCP integration guides with StreamableHTTP transport examples
+- 🔗 Direct API integration guides with X-Pay and MLE examples
 - 🎥 Video walkthrough and usage examples
 
 ### Quick Access

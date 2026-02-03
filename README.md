@@ -28,6 +28,7 @@ Visa Intelligent Commerce provides a suite of integrated APIs, tokenized digital
 - [Visa Developer Quick Start Guide](https://developer.visa.com/pages/working-with-visa-apis/visa-developer-quick-start-guide) - Getting started with Visa APIs
 - [X-Pay Token Authentication](https://developer.visa.com/pages/working-with-visa-apis/x-pay-token) - Guide for implementing X-Pay token-based authentication
 - [Encryption Guide](https://developer.visa.com/pages/encryption_guide) - Message Level Encryption (MLE) documentation and best practices
+
 ## 🚀 Getting Started
 
 This repository provides **two integration approaches** for Visa Intelligent Commerce:
@@ -77,6 +78,7 @@ The `apps/` directory contains independent example packages:
   - End-to-end workflow examples (create/cancel instructions, update instructions, retrieve credentials)
   - Error handling and response processing patterns
   - Complete with dependencies, configs, and documentation
+
 ### 🤖 Agent Demo
 
 **Complete end-to-end example of adding a Visa card to VIC**

@@ -26,6 +26,7 @@
     "@modelcontextprotocol/sdk": "^1.0.4",
     "@vic/mcp-client": "file:../../../packages/mcp-client",
     "@vic/token-manager": "file:../../../packages/token-manager",
+    "@vic/api-client": "file:../../../packages/api-client",
     "jose": "^5.9.6"
   },
   "devDependencies": {

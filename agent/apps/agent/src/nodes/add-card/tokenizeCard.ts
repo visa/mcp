@@ -1,9 +1,8 @@
 import { RunnableConfig } from "@langchain/core/runnables";
 import { AIMessage } from "@langchain/core/messages";
 import { GraphState } from "../../utils/state.js";
-import { ToolRegistry } from "../../utils/mcp/index.js";
+import type { ExecutionContext } from "../../utils/execution-context/index.js";
 import { generateEmailHash, encryptWithSecret } from "../../utils/crypto.js";
-import { MCP_TOOLS } from "../../utils/constant.js";
 
 /**
  * Prepares encrypted payment instrument data from card data
@@ -74,10 +73,10 @@ export async function tokenizeCard(
   state: typeof GraphState.State,
   config: RunnableConfig
 ): Promise<Partial<typeof GraphState.State>> {
-  const registry = config.configurable?.toolRegistry as ToolRegistry;
+  const context = config.configurable?.executionContext as ExecutionContext;
 
-  if (!registry) {
-    console.error("ToolRegistry not found in config.configurable");
+  if (!context) {
+    console.error("ExecutionContext not found in config.configurable");
     return {
       messages: [
         new AIMessage({
@@ -142,15 +141,9 @@ export async function tokenizeCard(
 
     console.log("Calling provision-token-given-pan-data with payload");
 
-    // Functionally equivalent REST endpoint:
-    // POST /vts/provisionedTokens?searchParams=
     const { result, messages: toolMessages } =
-      await registry.callToolDirectWithMessages<any>(
-        MCP_TOOLS.PROVISION_TOKEN_GIVEN_PAN_DATA,
-        payload
-      );
+      await context.provisionTokenGivenPanData(payload);
 
-    // Extract vProvisionedTokenID directly from result
     const vProvisionedTokenID = result?.data?.vProvisionedTokenID;
 
     if (!vProvisionedTokenID) {

@@ -1,9 +1,8 @@
 import { RunnableConfig } from "@langchain/core/runnables";
 import { AIMessage } from "@langchain/core/messages";
 import { GraphState, StepUpRequestItem } from "../../utils/state.js";
-import { ToolRegistry } from "../../utils/mcp/index.js";
+import type { ExecutionContext } from "../../utils/execution-context/index.js";
 import { encryptWithSecret, generateEmailHash } from "../../utils/crypto.js";
-import { MCP_TOOLS } from "../../utils/constant.js";
 
 /**
  * Device Binding node that calls the MCP server tool.
@@ -22,10 +21,10 @@ export async function deviceBinding(
   state: typeof GraphState.State,
   config: RunnableConfig
 ): Promise<Partial<typeof GraphState.State>> {
-  const registry = config.configurable?.toolRegistry as ToolRegistry;
+  const context = config.configurable?.executionContext as ExecutionContext;
 
-  if (!registry) {
-    console.error("ToolRegistry not found in config.configurable");
+  if (!context) {
+    console.error("ExecutionContext not found in config.configurable");
     return {
       messages: [
         new AIMessage({
@@ -106,13 +105,8 @@ export async function deviceBinding(
 
     console.log("Calling device-binding-request with payload");
 
-    // Functionally equivalent REST endpoint:
-    // GET/POST /vts/provisionedTokens/{vProvisionedTokenID}/deviceBinding?searchParams=
     const { result, messages: toolMessages } =
-      await registry.callToolDirectWithMessages<any>(
-        MCP_TOOLS.DEVICE_BINDING_REQUEST,
-        payload
-      );
+      await context.deviceBindingRequest(state.private_tokenId, payload);
 
     console.log("Device binding completed successfully");
 

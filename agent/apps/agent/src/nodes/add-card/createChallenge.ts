@@ -1,8 +1,7 @@
 import { RunnableConfig } from "@langchain/core/runnables";
 import { AIMessage } from "@langchain/core/messages";
 import { GraphState, isCreateChallengeError } from "../../utils/state.js";
-import { ToolRegistry } from "../../utils/mcp/index.js";
-import { MCP_TOOLS } from "../../utils/constant.js";
+import type { ExecutionContext } from "../../utils/execution-context/index.js";
 
 /**
  * Create Challenge node that submits the IDV step-up method.
@@ -22,10 +21,10 @@ export async function createChallenge(
   state: typeof GraphState.State,
   config: RunnableConfig
 ): Promise<Partial<typeof GraphState.State>> {
-  const registry = config.configurable?.toolRegistry as ToolRegistry;
+  const context = config.configurable?.executionContext as ExecutionContext;
 
-  if (!registry) {
-    console.error("ToolRegistry not found in config.configurable");
+  if (!context) {
+    console.error("ExecutionContext not found in config.configurable");
     return {
       messages: [
         new AIMessage({
@@ -76,13 +75,8 @@ export async function createChallenge(
 
     console.log("Calling submit-idv-step-up-method with payload");
 
-    // Functionally equivalent REST endpoint:
-    // PUT /vts/provisionedTokens/{vProvisionedTokenID}/stepUpOptions/method?searchParams=
     const { result, messages: toolMessages } =
-      await registry.callToolDirectWithMessages<any>(
-        MCP_TOOLS.SUBMIT_IDV_STEP_UP_METHOD,
-        payload
-      );
+      await context.submitIdvStepUpMethod(state.private_tokenId, payload);
 
     if (isCreateChallengeError(result)) {
       console.error(

@@ -1,8 +1,7 @@
 import { RunnableConfig } from "@langchain/core/runnables";
 import { AIMessage } from "@langchain/core/messages";
 import { GraphState } from "../../utils/state.js";
-import { ToolRegistry } from "../../utils/mcp/index.js";
-import { MCP_TOOLS } from "../../utils/constant.js";
+import type { ExecutionContext } from "../../utils/execution-context/index.js";
 import { encryptWithSecret } from "../../utils/crypto.js";
 
 /**
@@ -25,10 +24,10 @@ export async function registerAttestationOptions(
   state: typeof GraphState.State,
   config: RunnableConfig
 ): Promise<Partial<typeof GraphState.State>> {
-  const registry = config.configurable?.toolRegistry as ToolRegistry;
+  const context = config.configurable?.executionContext as ExecutionContext;
 
-  if (!registry) {
-    console.error("ToolRegistry not found in config.configurable");
+  if (!context) {
+    console.error("ExecutionContext not found in config.configurable");
     return {
       messages: [
         new AIMessage({
@@ -116,13 +115,8 @@ export async function registerAttestationOptions(
       "Calling get-device-attestation-options with REGISTER type payload"
     );
 
-    // Functionally equivalent REST endpoint:
-    // POST /vts/provisionedTokens/{vProvisionedTokenID}/attestation/options?searchParams=
     const { result, messages: toolMessages } =
-      await registry.callToolDirectWithMessages<any>(
-        MCP_TOOLS.GET_DEVICE_ATTESTATION_OPTIONS,
-        payload
-      );
+      await context.getDeviceAttestationOptions(state.private_tokenId, payload);
 
     // Validate that identifier and payload are present
     const hasIdentifier = result?.data?.authenticationContext?.identifier;

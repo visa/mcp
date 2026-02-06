@@ -1,14 +1,17 @@
 /**
- * VIC API Client
- * Direct VIC API calls with X-Pay authentication and MLE encryption
+ * Visa API Clients
+ * Direct API calls with X-Pay authentication
+ * - VicApiClient: VIC APIs with MLE encryption
+ * - VtsApiClient: VTS APIs without MLE encryption
  */
 
-// Main client
+// Main clients
 export { VicApiClient } from './client.js';
+export { VtsApiClient } from './vts-client.js';
 
 // Configuration
-export { loadVicConfig } from './config.js';
-export type { ValidatedVicConfig } from './config.js';
+export { loadVicConfig, loadVtsConfig } from './config.js';
+export type { ValidatedVicConfig, ValidatedVtsConfig } from './config.js';
 
 // Types
 export type { VicResponse, XPayTokenParams, MleConfig, VicApiError } from './types.js';

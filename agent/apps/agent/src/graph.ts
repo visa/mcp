@@ -12,6 +12,10 @@ import {
   createToolRegistry,
   McpClient,
 } from "./utils/mcp/index.js";
+import {
+  createExecutionContext,
+  type ExecutionContext,
+} from "./utils/execution-context/index.js";
 import { NODE_NAMES, MODE, ACTION } from "./utils/constant.js";
 
 // Add-card flow imports
@@ -416,13 +420,27 @@ const compiledGraph = workflow.compile({
   interruptAfter: [],
 });
 
-// Helper to enhance config with tool registry
+// Helper to enhance config with execution context
 function enhanceConfig(config?: any) {
+  // Read from environment variable - consistent across all calls
+  const useDirectApi = process.env.USE_DIRECT_API === "true";
+
+  // Create execution context - factory handles validation
+  let executionContext: ExecutionContext | null = null;
+  try {
+    executionContext = createExecutionContext(
+      useDirectApi,
+      toolRegistry || undefined
+    );
+  } catch (error) {
+    console.error("Failed to create execution context:", error);
+  }
+
   return {
     ...config,
     configurable: {
       ...config?.configurable,
-      toolRegistry,
+      executionContext,
     },
   };
 }

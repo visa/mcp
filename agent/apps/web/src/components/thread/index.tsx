@@ -521,20 +521,18 @@ export function Thread() {
                     />
 
                     <div className="flex items-center justify-between p-2 pt-4">
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <Switch
-                            id="render-tool-calls"
-                            checked={hideToolCalls ?? false}
-                            onCheckedChange={setHideToolCalls}
-                          />
-                          <Label
-                            htmlFor="render-tool-calls"
-                            className="text-sm text-gray-600"
-                          >
-                            Hide Tool Calls
-                          </Label>
-                        </div>
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="render-tool-calls"
+                          checked={hideToolCalls ?? false}
+                          onCheckedChange={setHideToolCalls}
+                        />
+                        <Label
+                          htmlFor="render-tool-calls"
+                          className="text-sm text-gray-600"
+                        >
+                          Hide Tool Calls
+                        </Label>
                       </div>
                       {stream.isLoading ? (
                         <Button key="stop" onClick={() => stream.stop()}>

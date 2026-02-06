@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { createXPayToken } from './x-pay-token.js';
 import { encryptPayload, decryptPayload } from './mle.js';
 import { loadVicConfig, type ValidatedVicConfig } from './config.js';
+import { getCorrelationId, createEnhancedError } from './api-utils.js';
 import type { VicApiError } from './types.js';
 
 /**
@@ -82,7 +83,7 @@ export class VicApiClient {
       });
 
       // Extract correlation ID
-      const correlationId = this.getCorrelationId(responseHeaders);
+      const correlationId = getCorrelationId(responseHeaders);
 
       // Parse response data
       let responseData = await response.json();
@@ -105,7 +106,13 @@ export class VicApiClient {
             );
           }
         }
-        throw this.createEnhancedError(response, responseData, responseHeaders, correlationId);
+        throw createEnhancedError(
+          response,
+          responseData,
+          responseHeaders,
+          correlationId,
+          'VIC API'
+        );
       }
 
       // Handle MLE decryption for success response (always enabled)
@@ -134,77 +141,6 @@ export class VicApiClient {
         `VIC API request failed: ${error instanceof Error ? error.message : String(error)}`
       );
     }
-  }
-
-  /**
-   * Extracts correlation ID from response headers
-   */
-  private getCorrelationId(headers: Record<string, string>): string | undefined {
-    return headers['x-correlation-id'] || headers['X-CORRELATION-ID'];
-  }
-
-  /**
-   * Extracts error details from Visa API response data
-   */
-  private extractErrorDetails(responseData: unknown): string {
-    if (!responseData || typeof responseData !== 'object' || !('responseStatus' in responseData)) {
-      return '';
-    }
-
-    const status = (responseData as Record<string, unknown>).responseStatus;
-    if (!status || typeof status !== 'object') {
-      return '';
-    }
-
-    const statusObj = status as Record<string, unknown>;
-    const parts: string[] = [];
-
-    // Helper to safely convert unknown to string
-    const toStr = (val: unknown): string => {
-      if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
-        return String(val);
-      }
-      return JSON.stringify(val);
-    };
-
-    if (statusObj.code !== undefined) {
-      parts.push(`Code: ${toStr(statusObj.code)}`);
-    }
-    if (statusObj.message !== undefined) {
-      parts.push(`Message: ${toStr(statusObj.message)}`);
-    }
-    if (statusObj.info !== undefined) {
-      parts.push(`Info: ${toStr(statusObj.info)}`);
-    }
-    if (statusObj.severity !== undefined) {
-      parts.push(`Severity: ${toStr(statusObj.severity)}`);
-    }
-
-    return parts.length > 0 ? ` - ${parts.join(', ')}` : '';
-  }
-
-  /**
-   * Creates an enhanced error with response details
-   */
-  private createEnhancedError(
-    response: Response,
-    responseData: unknown,
-    headers: Record<string, string>,
-    correlationId?: string
-  ): VicApiError {
-    const errorDetails = this.extractErrorDetails(responseData);
-    const error = new Error(
-      `VIC API Error: ${response.status} ${response.statusText}${errorDetails}`
-    ) as VicApiError;
-
-    // Attach full details for debugging
-    error.status = response.status;
-    error.statusText = response.statusText;
-    error.correlationId = correlationId;
-    error.headers = headers;
-    error.responseData = responseData;
-
-    return error;
   }
 
   /**
@@ -346,17 +282,18 @@ export class VicApiClient {
 
       // Check for errors
       if (!response.ok) {
-        throw this.createEnhancedError(
+        throw createEnhancedError(
           response,
           responseData,
           responseHeaders,
-          this.getCorrelationId(responseHeaders)
+          getCorrelationId(responseHeaders),
+          'VIC API'
         );
       }
 
       const result = {
         data: responseData,
-        correlationId: this.getCorrelationId(responseHeaders),
+        correlationId: getCorrelationId(responseHeaders),
       };
       return result as T;
     } catch (error) {

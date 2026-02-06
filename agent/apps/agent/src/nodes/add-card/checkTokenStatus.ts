@@ -1,8 +1,7 @@
 import { RunnableConfig } from "@langchain/core/runnables";
 import { AIMessage } from "@langchain/core/messages";
 import { GraphState, isCheckTokenStatusError } from "../../utils/state.js";
-import { ToolRegistry } from "../../utils/mcp/index.js";
-import { MCP_TOOLS } from "../../utils/constant.js";
+import type { ExecutionContext } from "../../utils/execution-context/index.js";
 
 /**
  * Check Token Status node that retrieves the current status of the provisioned token.
@@ -23,10 +22,10 @@ export async function checkTokenStatus(
   state: typeof GraphState.State,
   config: RunnableConfig
 ): Promise<Partial<typeof GraphState.State>> {
-  const registry = config.configurable?.toolRegistry as ToolRegistry;
+  const context = config.configurable?.executionContext as ExecutionContext;
 
-  if (!registry) {
-    console.error("ToolRegistry not found in config.configurable");
+  if (!context) {
+    console.error("ExecutionContext not found in config.configurable");
     return {
       messages: [
         new AIMessage({
@@ -47,19 +46,11 @@ export async function checkTokenStatus(
   }
 
   try {
-    const payload: Record<string, unknown> = {
-      vProvisionedTokenID: state.private_tokenId,
-    };
+    console.log("Calling get-token-status for token:", state.private_tokenId);
 
-    console.log("Calling get-token-status with payload");
-
-    // Functionally equivalent REST endpoint:
-    // GET /vts/provisionedTokens/{vProvisionedTokenID}?searchParams=
-    const { result, messages: toolMessages } =
-      await registry.callToolDirectWithMessages<any>(
-        MCP_TOOLS.GET_TOKEN_STATUS,
-        payload
-      );
+    const { result, messages: toolMessages } = await context.getTokenStatus(
+      state.private_tokenId!
+    );
 
     if (isCheckTokenStatusError(result)) {
       console.error(

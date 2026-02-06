@@ -36,11 +36,14 @@ export function SettingsPanel({
 }: SettingsPanelProps) {
   const [tempModel, setTempModel] = useState(currentModel);
   const modelChanged = tempModel !== currentModel;
+  const hasChanges = modelChanged;
 
   const handleApply = () => {
     if (modelChanged) {
       onModelChange(tempModel);
-      onStartNewThread(); // Force new thread when model changes
+    }
+    if (hasChanges) {
+      onStartNewThread(); // Force new thread when settings change
     }
     onOpenChange(false);
   };
@@ -89,13 +92,16 @@ export function SettingsPanel({
             </Select>
           </div>
 
-          {modelChanged && (
+          {/* Separator */}
+          <Separator />
+
+          {hasChanges && (
             <div className="bg-[var(--visa-gold)]/10 border-2 border-[var(--visa-gold)] rounded-md p-4 text-base">
               <p className="font-semibold text-[var(--visa-blue-primary)] mb-2">
                 Note:
               </p>
               <p className="text-[var(--visa-blue-primary)]">
-                Changing the model will start a new conversation thread. Your
+                Changing settings will start a new conversation thread. Your
                 current conversation will be saved in history.
               </p>
             </div>
@@ -105,7 +111,7 @@ export function SettingsPanel({
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button onClick={handleApply} disabled={!modelChanged}>
+            <Button onClick={handleApply} disabled={!hasChanges}>
               Apply
             </Button>
           </div>

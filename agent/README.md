@@ -1,6 +1,6 @@
 # Visa Intelligent Commerce - Agent Demo
 
-AI agent that integrates with Visa Intelligent Commerce MCP server to demonstrate agentic commerce capabilities.
+AI agent that integrates with Visa Intelligent Commerce (VIC) to demonstrate agentic commerce capabilities. Supports both MCP server integration and direct VDP API calls.
 
 ## Tech Stack
 
@@ -9,10 +9,21 @@ AI agent that integrates with Visa Intelligent Commerce MCP server to demonstrat
 - **TypeScript**
 - **Anthropic Claude / OpenAI GPT** - LLM providers
 
+## Integration Modes
+
+This demo supports two VIC integration approaches, controlled by the `USE_DIRECT_API` environment variable:
+
+| Mode | `USE_DIRECT_API` | Description |
+|------|------------------|-------------|
+| **MCP Server** | `false` (default)         | Routes API calls through VIC MCP server using `@vic/mcp-client` |
+| **Direct VDP API** | `true`           | Calls VDP APIs directly using `@vic/api-client` with X-Pay authentication |
+
+Both modes provide the same functionality. See the [main README](../README.md#-getting-started) for more details on each approach.
+
 ## Prerequisites
 
 - Node.js (v18+)
-- Visa MCP server credentials
+- Visa credentials (see `.env.example`)
 - LLM API keys (Anthropic/OpenAI)
 
 ## 🚀 Quick Start
@@ -31,14 +42,14 @@ AI agent that integrates with Visa Intelligent Commerce MCP server to demonstrat
    ```bash
    npm run build:packages --prefix ..
    ```
-   Required on first setup to compile shared packages (`@vic/mcp-client`, `@vic/token-manager`).
+   Required on first setup to compile shared packages (`@vic/mcp-client`, `@vic/api-client`, `@vic/token-manager`).
 
 4. **Configure environment:**
    ```bash
    cp .env.example .env
    cp apps/web/.env.example apps/web/.env.local
    ```
-   Edit both .env files with your credentials.
+   Edit both `.env` files with your credentials. Set `USE_DIRECT_API=true` for direct VDP calls or `false` for MCP server mode.
 
 5. **Run the application:**
    ```bash
@@ -93,6 +104,8 @@ agent/
 ## 📚 References
 
 - [Visa MCP Hub](https://mcp.visa.com)
-- [Main Project README](../README.md)
+- [Main Project README](../README.md) - Integration approaches and package documentation
+- [@vic/mcp-client](../packages/mcp-client) - MCP client package
+- [@vic/api-client](../packages/api-client) - Direct API client package
 - [LangGraphJS Documentation](https://github.com/langchain-ai/langgraphjs)
 - [Agent Chat UI](https://github.com/langchain-ai/agent-chat-ui)

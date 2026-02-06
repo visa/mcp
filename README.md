@@ -1,6 +1,6 @@
-# Visa Intelligent Commerce (VIC) - MCP Integration Starter Kit
+# Visa Intelligent Commerce (VIC) - Integration Starter Kit
 
-This repository provides starter code, examples, and documentation to help external developers integrate their AI agents with VIC Model Context Protocol (MCP) server. It includes Node.js/TypeScript client implementations, authentication patterns, and workflow examples for building agentic commerce experiences.
+This repository provides starter code, examples, and documentation to help external developers integrate their AI agents with Visa Intelligent Commerce. It includes Node.js/TypeScript client implementations for both MCP server and direct VDP API integration, along with authentication patterns and workflow examples for building agentic commerce experiences.
 
 ## Visa Intelligent Commerce
 
@@ -39,7 +39,7 @@ Both approaches provide the same VIC capabilities. This repository is organized 
 
 ### 📦 Packages
 
-**Reusable packages for VIC MCP integration**
+**Reusable packages for VIC integration**
 
 The `packages/` directory contains shared packages that can be used across different implementations:
 

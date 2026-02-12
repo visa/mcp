@@ -1,5 +1,5 @@
 {
-  "name": "@vic/api-client",
+  "name": "@visa/api-client",
   "version": "1.0.0",
   "description": "VIC API client for direct VIC API calls with X-Pay authentication and MLE encryption",
   "main": "dist/index.js",

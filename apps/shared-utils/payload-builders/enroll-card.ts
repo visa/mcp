@@ -19,10 +19,10 @@ import {
  * @returns Complete enroll-card payload object
  */
 export function buildEnrollCardPayload(
-    consumerId: string,
-    enrollmentReferenceId: string,
-    context: WorkflowContext,
-    client?: Record<string, unknown>
+  consumerId: string,
+  enrollmentReferenceId: string,
+  context: WorkflowContext,
+  client?: Record<string, unknown>
 ): Record<string, unknown> {
   const consentId = crypto.randomUUID();
   const acceptedTime = generateTimestamp();

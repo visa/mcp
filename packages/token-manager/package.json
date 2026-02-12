@@ -1,5 +1,5 @@
 {
-  "name": "@vic/token-manager",
+  "name": "@visa/token-manager",
   "version": "1.0.0",
   "description": "Visa token generation and management for MCP authentication",
   "main": "dist/index.js",

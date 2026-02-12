@@ -43,20 +43,21 @@ Both approaches provide the same VIC capabilities. This repository is organized 
 
 The `packages/` directory contains shared packages that can be used across different implementations:
 
-- **[@vic/token-manager](./packages/token-manager)** - JWE token generation and management for VIC MCP authentication
+- **[@visa/token-manager](./packages/token-manager)** - JWE token generation and management for MCP authentication
   - Automatic token refresh and caching
   - Environment-based credential loading
   - Zod schema validation
 
-- **[@vic/mcp-client](./packages/mcp-client)** - Node.js/TypeScript MCP client for connecting to VIC MCP servers
+- **[@visa/mcp-client](./packages/mcp-client)** - Node.js/TypeScript MCP client for connecting to Visa MCP server
   - Automatic authentication and token refresh
   - Tool discovery and execution
   - Type-safe API with comprehensive error handling
 
-- **[@vic/api-client](./packages/api-client)** - Direct API client for VIC with X-Pay authentication and MLE
+- **[@visa/api-client](./packages/api-client)** - API clients for VIC and VDP with X-Pay authentication
+  - VicApiClient: VIC APIs with automatic MLE encryption/decryption
+  - VdpApiClient: VDP APIs (no MLE) for connectivity testing
+  - VtsApiClient: VTS APIs for token provisioning
   - X-Pay token authentication (HMAC-SHA256)
-  - Automatic MLE encryption/decryption
-  - Complete VIC API coverage
   - Environment-based configuration
 
 ### 👨‍💻 Client Usage Examples
@@ -65,37 +66,41 @@ The `packages/` directory contains shared packages that can be used across diffe
 
 The `apps/` directory contains independent example packages:
 
-- **🔐 MCP Client Examples ([mcp-examples/](./apps/mcp-examples))**
+- **🔐 MCP Client Examples ([vic-mcp-examples/](./apps/vic-mcp-examples))**
   - MCP server connection examples using StreamableHTTP transport
   - Automatic token management patterns
   - Individual tool invocation examples (enroll-card, initiate-purchase-instruction, retrieve-payment-credentials, etc.)
   - Multi-tool workflow orchestration patterns
   - Complete with dependencies, configs, and documentation
 
-- **🚀 API Client Examples ([api-examples/](./apps/api-examples))**
+- **🚀 VIC API Client Examples ([vic-api-examples/](./apps/vic-api-examples))**
   - Direct REST API integration examples using VicApiClient
   - X-Pay token authentication and MLE encryption patterns
   - End-to-end workflow examples (create/cancel instructions, update instructions, retrieve credentials)
   - Error handling and response processing patterns
   - Complete with dependencies, configs, and documentation
 
+- **🌐 VDP API Examples ([vdp-api-examples/](./apps/vdp-api-examples))**
+  - VDP connectivity testing using VdpApiClient
+  - X-Pay token authentication patterns (no MLE)
+
 ### 🤖 Agent Demo
 
 **Complete end-to-end example of adding a Visa card to VIC**
 
-The [agent/](./agent) directory contains an end-to-end demonstration of the full card enrollment workflow using an AI agent.
+The [vic-agent/](./vic-agent) directory contains an end-to-end demonstration of the full card enrollment workflow using an AI agent.
 
 - LangGraphJS-powered AI agent with Next.js conversational UI
 - **Full VIC card enrollment workflow:**
   - Card tokenization via VTS
   - Device binding with FIDO authentication
-  - Step-up verification
+  - Step-up verification 
   - Visa Payment Passkey creation
   - Assurance data collection and VIC enrollment (`enroll-card`)
 - Interactive multi-step flow demonstrating real-world cardholder verification
 - Ready to run locally with your Visa credentials
 
-See the [agent setup instructions](./agent/README.md) for configuration details.
+See the [vic-agent setup instructions](./vic-agent/README.md) for configuration details.
 
 ## 🏗️ Building the Project
 
@@ -119,7 +124,7 @@ npm run build
 # Build only packages (token-manager, mcp-client, api-client)
 npm run build:packages
 
-# Build only apps (mcp-examples, api-examples)
+# Build only apps (vic-mcp-examples, vic-api-examples, vdp-api-examples)
 npm run build:apps
 
 # Build packages and agent

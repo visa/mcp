@@ -1,0 +1,29 @@
+{
+  "name": "vdp-api-examples",
+  "version": "1.0.0",
+  "description": "Usage examples for Visa Developer Platform API connectivity",
+  "private": true,
+  "scripts": {
+    "build": "npm install",
+    "lint": "eslint . --ext .ts,.js,.mjs",
+    "lint:fix": "eslint . --ext .ts,.js,.mjs --fix",
+    "format": "prettier --write .",
+    "api:test-connection": "npx tsx workflows/test-vdp-connection.ts",
+    "api:test-connection-mutual-tls": "npx tsx workflows/test-vdp-connection-mutual-tls.ts"
+  },
+  "keywords": [
+    "visa",
+    "vdp",
+    "api",
+    "rest",
+    "examples"
+  ],
+  "dependencies": {
+    "@visa/api-client": "file:../../packages/api-client",
+    "@visa/shared-utils": "file:../shared-utils",
+    "dotenv": "^16.4.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

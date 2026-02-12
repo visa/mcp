@@ -27,79 +27,142 @@ const VtsConfigSchema = z.object({
 export type ValidatedVtsConfig = z.infer<typeof VtsConfigSchema>;
 
 /**
- * Loads VIC API configuration from VISA_* environment variables
- * Matches the same environment variables used by TokenManager
+ * Zod schema for VDP API configuration validation
+ * VDP does not use MLE encryption
+ */
+const VdpConfigSchema = z.object({
+  baseUrl: z.string().url('Base URL must be a valid URL'),
+  apiKey: z.string().min(1, 'VDP API key is required'),
+  apiKeySharedSecret: z.string().min(1, 'VDP API key shared secret is required'),
+});
+
+export type ValidatedVdpConfig = z.infer<typeof VdpConfigSchema>;
+
+/**
+ * Generic configuration loader that reads VISA_* environment variables,
+ * validates them against a Zod schema, and returns the typed config.
  *
- * @returns Validated VIC configuration object
+ * @param schema - Zod schema to validate against
+ * @param envVarMapping - Maps config field names to VISA_ env var suffixes
+ * @param apiName - API name for error messages (e.g., 'VIC', 'VTS', 'VDP')
+ * @returns Validated configuration object
  * @throws {Error} If required environment variables are missing or invalid
  */
-export function loadVicConfig(): ValidatedVicConfig {
-  const getEnvVar = (key: string, required: boolean = true): string => {
+function loadConfig<T extends z.ZodTypeAny>(
+  schema: T,
+  envVarMapping: Record<string, string>,
+  apiName: string
+): z.infer<T> {
+  const getEnvVar = (key: string): string => {
     const value = process.env[`VISA_${key}`];
-
-    if (required && !value) {
+    if (!value) {
       throw new Error(`Missing required environment variable: VISA_${key}`);
     }
-
-    return value || '';
+    return value;
   };
 
   try {
-    const config = {
-      baseUrl: getEnvVar('API_BASE_URL'),
-      vicApiKey: getEnvVar('VIC_API_KEY'),
-      vicApiKeySharedSecret: getEnvVar('VIC_API_KEY_SS'),
-      mleServerCert: getEnvVar('MLE_SERVER_CERT'),
-      mlePrivateKey: getEnvVar('MLE_PRIVATE_KEY'),
-      keyId: getEnvVar('KEY_ID'),
-    };
-
-    return VicConfigSchema.parse(config);
+    const config: Record<string, string> = {};
+    for (const [field, envSuffix] of Object.entries(envVarMapping)) {
+      config[field] = getEnvVar(envSuffix);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return schema.parse(config);
   } catch (error) {
     if (error instanceof z.ZodError) {
       const issues = error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`);
-      throw new Error(`Invalid VIC API configuration:\n${issues.join('\n')}`);
+      throw new Error(`Invalid ${apiName} API configuration:\n${issues.join('\n')}`);
     }
     throw new Error(
-      `Failed to load VIC API configuration: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to load ${apiName} API configuration: ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }
 
 /**
+ * Loads VIC API configuration from VISA_* environment variables
+ * Matches the same environment variables used by TokenManager
+ */
+export function loadVicConfig(): ValidatedVicConfig {
+  return loadConfig(
+    VicConfigSchema,
+    {
+      baseUrl: 'API_BASE_URL',
+      vicApiKey: 'VIC_API_KEY',
+      vicApiKeySharedSecret: 'VIC_API_KEY_SS',
+      mleServerCert: 'MLE_SERVER_CERT',
+      mlePrivateKey: 'MLE_PRIVATE_KEY',
+      keyId: 'KEY_ID',
+    },
+    'VIC'
+  );
+}
+
+/**
  * Loads VTS API configuration from VISA_* environment variables
  * VTS does not require MLE encryption configuration
- *
- * @returns Validated VTS configuration object
- * @throws {Error} If required environment variables are missing or invalid
  */
 export function loadVtsConfig(): ValidatedVtsConfig {
-  const getEnvVar = (key: string, required: boolean = true): string => {
-    const value = process.env[`VISA_${key}`];
+  return loadConfig(
+    VtsConfigSchema,
+    {
+      baseUrl: 'VTS_API_BASE_URL',
+      apiKey: 'VTS_API_KEY',
+      apiKeySharedSecret: 'VTS_API_KEY_SS',
+    },
+    'VTS'
+  );
+}
 
-    if (required && !value) {
-      throw new Error(`Missing required environment variable: VISA_${key}`);
-    }
+/**
+ * Loads VDP API configuration from VISA_* environment variables
+ * VDP does not require MLE encryption configuration
+ */
+export function loadVdpConfig(): ValidatedVdpConfig {
+  return loadConfig(
+    VdpConfigSchema,
+    {
+      baseUrl: 'API_BASE_URL',
+      apiKey: 'VDP_API_KEY',
+      apiKeySharedSecret: 'VDP_API_KEY_SS',
+    },
+    'VDP'
+  );
+}
 
-    return value || '';
-  };
+/**
+ * Zod schema for VDP Mutual TLS (Two-Way SSL) API configuration validation
+ * Uses client certificates and HTTP Basic Auth instead of X-Pay tokens
+ */
+const VdpMutualTlsConfigSchema = z.object({
+  baseUrl: z.string().url('Base URL must be a valid URL'),
+  userId: z.string().min(1, 'VDP user ID is required'),
+  password: z.string().min(1, 'VDP password is required'),
+  clientCertPath: z.string().min(1, 'Client certificate path is required'),
+  privateKeyPath: z.string().min(1, 'Private key path is required'),
+  caCertPath: z.string().optional(),
+});
 
-  try {
-    // VTS uses a separate base URL (cert.api.visa.com) from VIC (sandbox.api.visa.com)
-    const config = {
-      baseUrl: getEnvVar('VTS_API_BASE_URL'),
-      apiKey: getEnvVar('VTS_API_KEY'),
-      apiKeySharedSecret: getEnvVar('VTS_API_KEY_SS'),
-    };
+export type ValidatedVdpMutualTlsConfig = z.infer<typeof VdpMutualTlsConfigSchema>;
 
-    return VtsConfigSchema.parse(config);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      const issues = error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`);
-      throw new Error(`Invalid VTS API configuration:\n${issues.join('\n')}`);
-    }
-    throw new Error(
-      `Failed to load VTS API configuration: ${error instanceof Error ? error.message : String(error)}`
-    );
-  }
+/**
+ * Loads VDP Mutual TLS configuration from VISA_* environment variables
+ * Used for Two-Way SSL authentication with client certificates
+ */
+export function loadVdpMutualTlsConfig(): ValidatedVdpMutualTlsConfig {
+  const baseConfig = loadConfig(
+    VdpMutualTlsConfigSchema.omit({ caCertPath: true }),
+    {
+      baseUrl: 'API_BASE_URL',
+      userId: 'VDP_USER_ID',
+      password: 'VDP_PASSWORD',
+      clientCertPath: 'VDP_CLIENT_CERT_PATH',
+      privateKeyPath: 'VDP_PRIVATE_KEY_PATH',
+    },
+    'VDP Mutual TLS'
+  );
+
+  const caCertPath = process.env.VISA_VDP_CA_CERT_PATH || undefined;
+
+  return { ...baseConfig, caCertPath };
 }

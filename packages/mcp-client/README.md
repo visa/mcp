@@ -1,4 +1,4 @@
-# @vic/mcp-client
+# @visa/mcp-client
 
 VIC MCP (Model Context Protocol) Client for Node.js - A TypeScript client for connecting to VIC MCP server with automatic authentication and token management.
 
@@ -9,15 +9,15 @@ This package provides a complete client implementation for integrating with VIC 
 ## Environment Variables
 
 - `VISA_MCP_BASE_URL` - Base URL for Visa MCP server (used by `createVisaMcpClient()`)
-- All authentication credentials are managed by [@vic/token-manager](../token-manager)
+- All authentication credentials are managed by [@visa/token-manager](../token-manager)
 
 ## For Complete Examples
 
-For complete usage examples, API documentation, environment variable setup, and working code samples, see the [mcp-examples](../../apps/mcp-examples) directory.
+For complete usage examples, API documentation, environment variable setup, and working code samples, see the [mcp-examples](../../apps/vic-mcp-examples) directory.
 
 ## Used By
 
 This package is used by:
 
-- **[mcp-examples](../../apps/mcp-examples)** - MCP usage examples and workflow demonstrations
-- **[agent](../../agent)** - LangGraph agent implementation
+- **[mcp-examples](../../apps/vic-mcp-examples)** - MCP usage examples and workflow demonstrations
+- **[vic-agent](../../vic-agent)** - LangGraph agent implementation

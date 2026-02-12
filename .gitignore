@@ -65,8 +65,8 @@ package-lock.json
 
 # GENERAL FRONTEND
 # SSL certificates
-agent/apps/web/.certs/
-agent/apps/web/*.pem
+vic-agent/apps/web/.certs/
+vic-agent/apps/web/*.pem
 *.pem
 
 # CLAUDE / MISC

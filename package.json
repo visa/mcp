@@ -12,7 +12,7 @@
     "build": "turbo build",
     "build:packages": "turbo build --filter='./packages/*'",
     "build:apps": "turbo build --filter='./apps/*'",
-    "build:agent": "cd agent && npm run build",
+    "build:agent": "cd vic-agent && npm run build",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "format": "turbo format",

@@ -11,11 +11,11 @@ import { generateTimestamp, buildMandate } from '../payload-helpers.js';
  * @returns Complete update-purchase-instruction payload object
  */
 export function buildUpdatePurchaseInstructionPayload(
-    consumerId: string,
-    tokenId: string,
-    context: WorkflowContext,
-    instructionId?: string,
-    client?: Record<string, unknown>
+  consumerId: string,
+  tokenId: string,
+  context: WorkflowContext,
+  instructionId?: string,
+  client?: Record<string, unknown>
 ): Record<string, unknown> {
   const verificationTimestamp = generateTimestamp();
 

@@ -1,0 +1,10 @@
+{
+  "node_version": "20",
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "vic-agent": "./apps/agent/src/graph.ts:graph"
+  },
+  "env": ".env"
+}

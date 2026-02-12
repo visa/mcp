@@ -3,7 +3,8 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
 import { Tool, ListToolsResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import * as dotenv from 'dotenv';
 import { z } from 'zod';
-import { TokenManager } from '@vic/token-manager';
+
+import { TokenManager } from '@visa/token-manager';
 
 // Load environment variables
 dotenv.config();

@@ -14,9 +14,9 @@ import { generateTimestamp } from '../payload-helpers.js';
  * @returns Complete cancel-purchase-instruction payload object
  */
 export function buildCancelPurchaseInstructionPayload(
-    context: WorkflowContext,
-    instructionId?: string,
-    client?: Record<string, unknown>
+  context: WorkflowContext,
+  instructionId?: string,
+  client?: Record<string, unknown>
 ): Record<string, unknown> {
   const verificationTimestamp = generateTimestamp();
 

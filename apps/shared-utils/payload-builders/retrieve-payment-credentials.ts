@@ -10,11 +10,11 @@ import { WorkflowContext } from '../constants.js';
  * @returns Complete retrieve-payment-credentials payload object
  */
 export function buildRetrievePaymentCredentialsPayload(
-    tokenId: string,
-    transactionReferenceId: string,
-    context: WorkflowContext,
-    instructionId?: string,
-    client?: Record<string, unknown>
+  tokenId: string,
+  transactionReferenceId: string,
+  context: WorkflowContext,
+  instructionId?: string,
+  client?: Record<string, unknown>
 ): Record<string, unknown> {
   const payload: Record<string, unknown> = {
     clientReferenceId: context.clientReferenceId,

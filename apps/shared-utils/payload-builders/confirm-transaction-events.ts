@@ -10,10 +10,10 @@ import { generateTimestamp } from '../payload-helpers.js';
  * @returns Complete confirm-transaction-events payload object
  */
 export function buildConfirmTransactionEventsPayload(
-    transactionReferenceId: string,
-    context: WorkflowContext,
-    instructionId?: string,
-    client?: Record<string, unknown>
+  transactionReferenceId: string,
+  context: WorkflowContext,
+  instructionId?: string,
+  client?: Record<string, unknown>
 ): Record<string, unknown> {
   const currentTimestamp = generateTimestamp();
   const futureTimestamp = (parseInt(currentTimestamp) + 86400 * 7).toString();

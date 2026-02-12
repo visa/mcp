@@ -1,10 +1,10 @@
-# @vic/token-manager
+# @visa/token-manager
 
 Visa token generation and management for MCP (Model Context Protocol) authentication.
 
 ## Overview
 
-This package provides JWE (JSON Web Encryption) token generation, caching, and automatic refresh functionality for authenticating with VIC MCP server. It handles the complete token lifecycle including credential loading, JWT signing, and JWE encryption.
+This package provides JWE (JSON Web Encryption) token generation, caching, and automatic refresh functionality for authenticating with VIC MCP servers. It handles the complete token lifecycle including credential loading, JWT signing, and JWE encryption.
 
 ## Features
 
@@ -16,7 +16,7 @@ This package provides JWE (JSON Web Encryption) token generation, caching, and a
 
 ## Installation
 
-This package is designed as a **shared utility** for the monorepo. It can be used by any project that needs Visa MCP authentication.
+This package is designed as a **shared utility** for the monorepo. It can be used by any project that needs VIC MCP authentication.
 
 ### For New Projects
 
@@ -27,7 +27,7 @@ To use this package in your project:
    ```json
    {
      "dependencies": {
-       "@vic/token-manager": "file:../packages/token-manager"
+       "@visa/token-manager": "file:../packages/token-manager"
      }
    }
    ```
@@ -51,7 +51,7 @@ To use this package in your project:
 ### Basic Usage
 
 ```typescript
-import { TokenManager } from '@vic/token-manager';
+import { TokenManager } from '@visa/token-manager';
 
 // Create token manager instance
 const tokenManager = new TokenManager();
@@ -68,7 +68,7 @@ const headers = {
 ### Manual Token Generation
 
 ```typescript
-import { createVisaJweToken, loadVisaCredentials } from '@vic/token-manager';
+import { createVisaJweToken, loadVisaCredentials } from '@visa/token-manager';
 
 // Load credentials from environment variables
 const credentials = loadVisaCredentials();
@@ -82,7 +82,7 @@ console.log('Expires at:', result.expiresAt);
 ### Credential Loading
 
 ```typescript
-import { loadVisaCredentials } from '@vic/token-manager';
+import { loadVisaCredentials } from '@visa/token-manager';
 
 try {
   const credentials = loadVisaCredentials();
@@ -153,7 +153,8 @@ The token generation process follows these steps:
 
 This package is used by:
 
-- **[@vic/mcp-client](../mcp-client)** - Main MCP client for server communication
-- **[agent/apps/agent](../../agent)** - LangGraph agent implementation
-- **[mcp-examples](../../apps/mcp-examples)** - MCP usage examples and workflow demonstrations
-- **[api-examples](../../apps/api-examples)** - API usage examples (coming soon)
+- **[@visa/mcp-client](../mcp-client)** - Main MCP client for server communication
+- **[vic-agent/apps/agent](../../vic-agent)** - LangGraph agent implementation
+- **[mcp-examples](../../apps/vic-mcp-examples)** - MCP usage examples and workflow demonstrations
+- **[vic-api-examples](../../apps/vic-api-examples)** - VIC API usage examples
+- **[vdp-api-examples](../../apps/vdp-api-examples)** - VDP connectivity testing examples

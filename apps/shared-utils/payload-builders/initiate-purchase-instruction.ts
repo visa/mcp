@@ -10,10 +10,10 @@ import { generateTimestamp, buildMandate } from '../payload-helpers.js';
  * @returns Complete initiate-purchase-instruction payload object
  */
 export function buildInitiatePurchaseInstructionPayload(
-    consumerId: string,
-    tokenId: string,
-    context: WorkflowContext,
-    client?: Record<string, unknown>
+  consumerId: string,
+  tokenId: string,
+  context: WorkflowContext,
+  client?: Record<string, unknown>
 ): Record<string, unknown> {
   const verificationTimestamp = generateTimestamp();
 

@@ -1,12 +1,13 @@
 {
-  "name": "@vic/shared-utils",
+  "name": "@visa/shared-utils",
   "version": "1.0.0",
   "description": "Shared utilities for MCP and API examples",
   "type": "module",
   "exports": {
     "./constants": "./constants.js",
     "./payload-helpers": "./payload-helpers.js",
-    "./payload-builders": "./payload-builders/index.js"
+    "./payload-builders": "./payload-builders/index.js",
+    "./workflow-helpers": "./workflow-helpers.js"
   },
   "scripts": {
     "build": "tsc",
